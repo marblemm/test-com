@@ -1,0 +1,28 @@
+import "oaidl.idl";
+import "ocidl.idl";
+
+[object, uuid(93C3840F-AD5A-4020-AAAB-313C4B61B184)]
+interface IBeginningCOM : IUnknown
+{
+    HRESULT Sum([in] int a, [in] int b, [out, retval] int* sum);
+}
+
+[
+    uuid(D9161D4D-66C0-4ae6-9264-C322BDE034C7),
+    version(1.0),
+    helpstring("BeginningCOMLib")
+]
+library BEGINNINGCOMLib
+{
+    importlib("stdole32.tlb");
+    importlib("stdole2.tlb");
+
+    [
+        uuid(586CDC7B-09F1-4f44-A110-F0E604AED81E),
+        helpstring("BeginningCOM Lib")
+    ]
+    coclass BeginningCOM
+    {
+        [default] interface IBeginningCOM;
+    };
+};

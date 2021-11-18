@@ -69,8 +69,10 @@ int main(int argc, char* argv[])
 	mbstowcs(pLibFileName, strDirectory, 256);
 	hResult = pDictionary->LoadLibrary((String)pLibFileName);
 
+	WCHAR wordName[256];
 	if (SUCCEEDED(hResult)) {
-		hResult = pDictionary->LookupWord((String)"tiger", (String)stringResult);
+		mbstowcs(wordName, "tiger", 256);
+		hResult = pDictionary->LookupWord((String)wordName, (String)stringResult);
 		
 		if (SUCCEEDED(hResult)) {
 			char *pTiger = new char[32];
@@ -78,8 +80,9 @@ int main(int argc, char* argv[])
 			printf("find the word \"tiger\" -- %s\n", pTiger);
 			delete pTiger;
 		}
+		mbstowcs(wordName, "elephant", 256);
 
-		pDictionary->InsertWord((String)"elephant", (String)"Ïó");
+		pDictionary->InsertWord((String)wordName, (String)"Ïó");
 		hResult = pDictionary->LookupWord((String)"elephant", (String)stringResult);
 		if (SUCCEEDED(hResult)) {
 			pDictionary->RestoreLibrary((String)"animal1.dict");
@@ -100,8 +103,9 @@ int main(int argc, char* argv[])
 		CoUninitialize();
 		return -5;
 	}
+	mbstowcs(wordName, "lion", 256);
 
-	hResult = pSpellCheck->CheckWord((String)"lion", (String)stringResult);
+	hResult = pSpellCheck->CheckWord((String)wordName, (String)stringResult);
 	if (SUCCEEDED(hResult)) {
 		printf("Word \"lion\" spelling right.\n");
 	} else {
@@ -110,7 +114,9 @@ int main(int argc, char* argv[])
 		printf("Word \"lion\" spelling is wrong. Maybe it is %s.\n", pLion);
 		delete pLion;
 	}
-	hResult = pSpellCheck->CheckWord((String)"dot", (String)stringResult);
+	mbstowcs(wordName, "dot", 256);
+
+	hResult = pSpellCheck->CheckWord((String)wordName, (String)stringResult);
 	if (SUCCEEDED(hResult)) {
 		printf("Word \"dot\" spelling right.\n");
 	} else {

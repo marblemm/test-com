@@ -8,6 +8,29 @@ using namespace std;
 
 int main()
 {
+	//第一种方法，不用注册dll
+	{
+		CLSID clsid;
+		typedef HRESULT(__stdcall* pfnGCO) (REFCLSID, REFIID, void**);
+		pfnGCO fnGCO = NULL;
+		HINSTANCE hdllInst = LoadLibrary(L"selfregisterno.dll"); //加载dll
+		fnGCO = (pfnGCO)GetProcAddress(hdllInst, "DllGetClassObject"); //从dll中得到DllGetClassObject
+		if (fnGCO != 0)
+		{
+			IBeginningCOM* pcf = nullptr;
+			HRESULT hr = (fnGCO)(CLSID_BeginningCOM, IID_IBeginningCOM, (void**)&pcf); //创建工厂
+			if (SUCCEEDED(hr) && (pcf != NULL))
+			{
+				int sum = 0;
+				pcf->Sum(1, 2, &sum);
+				cout << sum << endl;
+			}
+			pcf->Release();
+
+		}
+		FreeLibrary(hdllInst);//释放dll资源
+	}
+
 	CoInitialize(NULL);
 
 	HRESULT hr = NULL;

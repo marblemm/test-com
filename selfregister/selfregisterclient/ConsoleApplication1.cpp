@@ -9,6 +9,33 @@ using namespace std;
 
 int main()
 {
+	{
+		typedef HRESULT(__stdcall* pfnGCO) (REFCLSID, REFIID, void**);
+		pfnGCO fnGCO = NULL;
+		HINSTANCE hdllInst = LoadLibrary(L"selfregister.dll"); //加载dll
+		fnGCO = (pfnGCO)GetProcAddress(hdllInst, "DllGetClassObject"); //从dll中得到DllGetClassObject
+		if (fnGCO != 0)
+		{
+			IClassFactory* pcf = NULL;
+			HRESULT hr = (fnGCO)(CLSID_BeginningCOM, IID_IClassFactory, (void**)&pcf); //创建工厂
+
+			if (SUCCEEDED(hr) && (pcf != NULL))
+			{
+				IBeginningCOM* pbc = NULL;
+				hr = pcf->CreateInstance(NULL, __uuidof(IBeginningCOM), (void**)&pbc); //通过工厂创建dll中IiTrusPTA接口
+				//调用IiTrusPTA具体的业务操作
+				if (SUCCEEDED(hr) && (pbc != NULL))
+				{
+					int sum;
+					pbc->Sum(2, 3, &sum);
+					cout << sum << endl;
+				}
+				pbc->Release();
+			}
+			pcf->Release();
+		}
+		FreeLibrary(hdllInst);//释放dll资源
+	}
 
 	CoInitialize(NULL);
 

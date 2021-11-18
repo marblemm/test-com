@@ -4,5 +4,5 @@ Windows Registry Editor Version 5.00
 @="BeginningCOM"
 
 [HKEY_CLASSES_ROOT\Wow6432Node\CLSID\{7BB69A25-68E4-427a-BE4B-B06ED17531AA}\InprocServer32]
-@="E:\\github\\demo\\test-com\\Debug\\selfregisterno.dll"
+@="E:\\demo\\test-com\\Debug\\selfregisterno.dll"
 "ThreadingModel"="Both"
